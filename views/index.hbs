@@ -1,0 +1,75 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{title}}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col bg-success pt-3 pb-2">
+            <h4>Insert Data</h4>
+            <form action="/test/insert" method="post">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" name="title" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="title">Content</label>
+                    <input type="text" name="content" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="title">Author</label>
+                    <input type="text" name="author" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-default">Insert</button>
+            </form>
+        </div>
+        <div class="col bg-default">
+            <h4>Get Data</h4>
+            <a href="/test">LOAD DATA</a>
+            <div class="col">
+                {{# each items }}
+                    <article>
+                        <div>{{ this.title }}</div>
+                        <div>{{ this.content }}</div>
+                        <div>{{ this.author }}</div>
+                        <div>{{ this._id }}</div>
+                    </article>
+                {{/each}}
+            </div>
+        </div>
+        <div class="col bg-primary">
+            <h4>Update Data</h4>
+            <form action="/test/update" method="post">
+                <div class="form-group">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" name="id">
+                </div>
+                <div class="form-group">
+                    <label for="input-id">
+                        Title
+                    </label>
+                    <input type="text" class="form-control" name="title">
+                </div>
+                <div class="form-group">
+                    <label for="">Content</label>
+                    <input type="text" class="form-control" name="content">
+                </div>
+                <div class="form-group">
+                    <label for="">Author</label>
+                    <input type="text" class="form-control" name="author">
+                </div>
+                <button class="btn btn-default">Update</button>
+            </form>
+        </div>
+        <div class="col bg-danger">
+            <h4>Delete Data</h4>
+            <form action="/test/delete" method="post">
+                <div class="form-group">
+                    <label for="id">ID</label>
+                    <input name="id" type="text" class="form-control">
+                </div>
+                <button class="btn btn-defualt" type="submit">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
