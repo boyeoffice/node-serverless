@@ -1,0 +1,132 @@
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-solid" v-cloak>
+                <div class="box-header with-border">
+                    <h3 class="box-title">Users</h3>
+                    <div class="box-tools pull-right">
+                      <a href="/cp/users/create" class="btn btn-success btn-sm">Create</a>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th v-for="(th, index) in theads" :key="index">\{{th}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(data, index) in model.docs">
+                                <td>\{{ data.name }}</td>
+                                <td>\{{ data.email }}</td>
+                                <td>\{{ data.created_at | moment("Do MMMM YYYY") }}</td>
+                                <td>
+                                    <span :class="{'text': true, 'text-success': data.user_type == 'admin', 'text-warning': data.user_type == 'user'}">
+                                        \{{ data.user_type }}
+                                    </span>
+                                </td>
+                                <td>
+                                  <span :class="{'text': true, 'text-success':data.status=='active','text-danger':data.status=='deactivated'}">
+                                    \{{ data.status }}
+                                  </span>
+                                </td>
+                                <td>
+                                  <form @submit.prevent="deleteUser(data._id, index)">
+                                    <a :href=" '/cp/users/' + data._id + '/edit'" class="btn btn-primary btn-sm" title="Edit">
+                                        <i class="fa  fa-pencil-square-o"></i>
+                                    </a>
+                                    <button type="submit" title="Delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
+                                </form>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer">
+                  <div class="paginate-footer">
+                    <div class="paginate">
+                      <select @change="fetchData()" v-model="params.limit">
+                        <option value="3">3</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                      </select>
+                    </div>
+                    <div class="paginate">
+                      \{{model.page}} of \{{model.totalPages}} Pages
+                    </div>
+                    <div class="paginate">
+                      <button :disabled="model.hasPrevPage == false" class="btn btn-default btn-sm" @click="changeHandle('prev')">PREV</button>
+                      <button :disabled="model.hasNextPage == false" class="btn btn-default btn-sm" @click="changeHandle('next')">NEXT</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#section 'scripts'}}
+    <script>
+        new Vue({
+             el: '#app',
+            data(){
+                return{
+                    theads: ['Name','Email','Date','User Type','Status','Actions'],
+                    model: {{{json users}}},
+                    params: {
+                      page: 1,
+                      limit: 5
+                    },
+                    source: '/cp/users/users-json'
+                }
+            },
+            methods: {
+              deleteUser(id, index){
+                console.log('this works' + id)
+                axios.delete('/cp/users/' + id).then(response => {
+                  this.model.docs.splice(index, 1)
+                  toastr.success('User deleted!')
+                }).catch(error => {
+                  toastr.warning('An error occurred')
+                })
+              },
+              buildULR(){
+                const p = this.params
+                return `${this.source}?page=${p.page}&limit=${p.limit}`
+              },
+              fetchData(){
+                axios.get(this.buildULR()).then(response => {
+                  this.model = response.data
+                  console.log(response.data)
+                }).catch(error => {
+                  console.log(error.response.data)
+                })
+              },
+              changeHandle(value) {
+                switch(value){
+                  case 'next':
+                  this.params.page += 1
+                  break
+                  case 'prev': 
+                  this.params.page -= 1
+                  break
+                  default:
+                  this.model.page = value
+                }
+                this.fetchData()
+              }
+            }
+        })
+    </script>
+{{/section}}
+
+{{#section 'styles'}}
+  <style>
+    .paginate-footer {
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+{{/section}}

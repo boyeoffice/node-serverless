@@ -1,0 +1,115 @@
+<div class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box-solid">
+        <div class="box-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h4>Section 1</h4>
+              <img src="/images/architecture-construction-daylight-534228.jpg" class="img img-responsive" alt="">
+              <form action="" style="margin-top: 10px">
+                <div class="form-group">
+                  <input type="text" id="" class="form-control" placeholder="Inser link here">
+                </div>
+                <button class="btn btn-success">Upload</button>
+              </form>
+            </div>
+            <div class="col-md-6">
+              <h4>Section 2</h4>
+              <form action="">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Title here">
+                </div>
+                <div class="form-group">
+                  <textarea name="" id="" cols="30" rows="10" placeholder="Type Something here" class="form-control"></textarea>
+                </div>
+                <button class="btn btn-success">Save</button>
+              </form>
+            </div>
+            <div class="col-md-12" style="margin-top: 10px">
+              <h4 class="text-center">Section 3</h4>
+              <div class="row">
+                <div class="col-md-6">
+                  <form action="">
+                    <div class="form-group">
+                      <input type="text" class="form-control" placeholder="Title here">
+                    </div>
+                    <div class="form-group">
+                      <textarea rows="6" class="form-control"></textarea>
+                    </div>
+                    <button class="btn btn-success">Save</button>
+                  </form>
+                </div>
+                <div class="col-md-6">
+                  <form action="">
+                    <div class="form-group">
+                      <input type="text" class="form-control" placeholder="Title here">
+                    </div>
+                    <div class="form-group">
+                      <textarea rows="6" class="form-control"></textarea>
+                    </div>
+                    <button class="btn btn-success">Save</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12" style="margin-top: 10px">
+              <h4>Section 4</h4>
+              <div class="col-md-6">
+                <form action="">
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Insert link here">
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Insert link here">
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Insert link here">
+                  </div>
+                  <button class="btn btn-success">Save</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#section 'scripts'}}
+<script src="/dist/js/app.js"></script>
+<script>
+  new Vue({
+    el: '#app',
+    data(){
+      return{
+        form:{
+          width: 500,
+          height: 700
+        },
+        section3: []
+      }
+    },
+    methods: {
+      FileOnChange(e){
+        let selectedImage = e.target.files[0]
+        let formData = new FormData()
+        formData.append('image', selectedImage)
+        formData.append('width', 2898)
+        formData.append('height', 1453)
+        formData.append('title', 'homepage_section_1')
+        formData.append('post_type', 'homepage')
+        this.form = formData
+      },
+      uploadImage(){
+        axios.post('/api/upload_image', this.form).then(response => {
+          console.log(response.data)
+        }).catch(error => {
+          
+        })
+      }
+    }
+  })
+</script>
+{{/section}}

@@ -1,0 +1,84 @@
+.container .wrapper-intro {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  color: #2c2c2c;
+  text-align: start;
+}
+.container .wrapper-intro .inner {
+  width: 420px;
+  height: auto;
+  background-color: #fff;
+  -moz-background-clip: border;
+  -webkit-background-clip: border;
+  background-clip: border-box;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding;
+  background-clip: padding-box;
+  -moz-background-clip: content;
+  -webkit-background-clip: content;
+  background-clip: content-box;
+  border-left: 53px solid rgba(224, 23, 3, 0.6);
+}
+.wrapper-intro .inner  h2,
+.wrapper-intro .inner p {
+  padding: 0 8px;
+}
+.wrapper-intro .inner h2 {
+  text-transform: capitalize;
+  margin-top: 35px;
+}
+.wrapper-intro .inner p {
+  margin-bottom: 35px;
+}
+.index-page .page-header {
+  height: 100vh;
+}
+.about-page .page-header {
+  height: 60vh;
+}
+.ser-md {
+  margin: 50px 0;
+  
+}
+.ser-md .container .row h3 {
+  margin-bottom: 13px;
+  text-transform: capitalize;
+}
+.pro {
+  position: relative;
+  text-align: center;
+  color: #fff;
+}
+.core {
+  position: relative;
+  color: #fff;
+  padding: 50px 0;
+}
+.core i {
+  font-size: 27px;
+  border: solid 1px #fff;
+  border-radius: 50%;
+  width: 74px;
+  height: 74px;
+  line-height: 74px;
+  text-align: center;
+}
+.core h4 {
+  letter-spacing: 1px;
+  font-size: 1.25em;
+  padding-top: 2px;
+  margin-top: 0;
+}
+footer {
+  height: 60px;
+  color: #fff;
+}
+.admin-panel {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  margin-bottom: 40px;
+}

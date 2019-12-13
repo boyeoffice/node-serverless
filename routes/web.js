@@ -1,24 +1,27 @@
-var express = require('express')
-var router = express.Router()
-/*var mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost:27017/test')
-var Schema = mongoose.Schema*/
+var express = require('express');
+var router = express.Router();
+const csrf = require('csurf');
+const csrfProtection = csrf();
+
+router.use(csrfProtection);
+
 
 /* Controller */
-const index = require('../controller/IndexController')
-const test = require('../controller/TestController')
-
-/*var userDataSchema = new Schema({
-  title: {type: String, required: true},
-  content: String,
-  author: String
-}, {collection: 'user-data'});
-
-var UserData = mongoose.model('UserData', userDataSchema);*/
+const index = require('../controller/IndexController');
+const auth = require('../controller/AuthController');
 
 
-router.use('/', index)
-router.use('/test', test)
+
+
+router.use('/auth', notLoggedIn, auth);
+router.use('/', index);
 
 
 module.exports = router;
+
+function notLoggedIn(req, res, next){
+  if(!req.isAuthenticated()){
+      return next()
+  }
+  res.redirect('/auth/login');
+}

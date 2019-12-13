@@ -1,0 +1,121 @@
+<div class="content">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{title}}</h3>
+                </div>
+                <div class="box-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="title" class="col-lg-4">
+                                Title <i class="fa fa-info-circle uses-tooltip" 
+                                        data-toggle="tooltip" 
+                                        data-original-title="Title"></i>
+                            </label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" v-model="form.title">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-lg-4">
+                                Description <i class="fa fa-info-circle uses-tooltip" 
+                                        data-toggle="tooltip" 
+                                        data-original-title="Description"></i>
+                            </label>
+                            <div class="col-lg-8">
+                                <textarea rows="5" class="form-control" v-model="form.description"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <a href="/cp/pages" class="btn btn-default btn-sm">Back</a>
+                    <div class="pull-right">
+                        <button v-if="vissibleButton" @click="createPage" class="btn btn-primary btn-sm">Save</button>
+                        <button disabled v-else class="btn btn-primary btn-sm">
+                            <i class="fa fa-circle-o-notch fa-spin"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select2 v-model="form.status">
+                            <option value="active">Activate</option>
+                            <option value="deactivated">Deactivate</option>
+                        </select2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#section 'scripts'}}
+<script>
+    const Select2 = {
+        props: ['options', 'value', 'name'],
+        mounted: function(){
+                var vm = this
+                $(this.$el)
+                //init select2
+                .select2({theme: "bootstrap", data: this.options})
+                .val(this.value)
+                .trigger('change')
+                //emit event on change 
+                .on('change', function(){
+                    vm.$emit('input', this.value)
+                })
+            },
+            watch: {
+                value: function(value){
+                    //update value
+                    $(this.$el)
+                    .val(value)
+                    .trigger('change')
+                },
+                options: function(options){
+                    //update options
+                    $(this.$el).empty().select2({ data: options})
+                }
+            },
+            destroyed: function(){
+                $(this.$el).off().select2('destroy')
+            },
+            template: `
+                <select style="width: 100%;" class="form-control" :name="name">
+                    <slot></slot>
+                </select>
+            `
+        }
+    new Vue({
+        el: '#app',
+        components: {
+            Select2
+        },
+        data(){
+            return{
+                form: {},
+                vissibleButton: true
+            }
+        },
+        methods:{
+            createPage(){
+                this.vissibleButton = false
+                axios.post('/cp/pages/store', this.form).then(response => {
+                    toastr.success('Page created!')
+                    window.location = '/cp/pages'
+                }).catch(error => {
+                    toastr.warning('An error occurred!')
+                    this.vissibleButton = true
+                })
+            }
+        }
+    })
+</script>
+{{/section}}

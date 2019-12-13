@@ -1,0 +1,43 @@
+<div class="lp">
+    <div class="lp-form">
+        <h1 class="lp-title">Adcomfort</h1>
+         <p>Welcome, please login.</p> 
+         {{#if hasErrors}}
+         <div class="alert alert-danger">
+           {{# each errors}}
+              {{this}}<br/>
+           {{/each}}
+         </div>
+         {{/if}}
+         <form action="/auth/signup" method="POST">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <div class="form-group">
+             <label for="email">Full Name:</label>
+              <input type="text" name="name" placeholder="Full Name" required="required" class="form-control">
+              </div> 
+             <div class="form-group">
+             <label for="email">Email:</label>
+              <input type="email" name="email" placeholder="Email Address" required="required" class="form-control">
+              </div> 
+              <div class="form-group">
+            <label for="password">Password:</label>
+          <input type="password" required="required" name="password" placeholder="Password" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="password">Repeat Password:</label>
+            <a href="/auth/login" class="">
+            Have an account?
+          </a> 
+          <input type="password" required="required" name="confirmPassword" placeholder="Password" class="form-control">
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary btn-block">
+            Sign up
+          </button>
+          </div>
+          </form>
+         <div class="lp-footer">
+             <h2>© 2019 Adcomfort</h2>
+        </div>
+        </div>
+        </div>

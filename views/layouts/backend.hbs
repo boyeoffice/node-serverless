@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{csrfToken}}">
+    <title>{{title}}</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    <link rel="stylesheet" href="http://boyeoffice.test/dist/css/adminLTE.css">
+    <link rel="stylesheet" href="http://boyeoffice.test/dist/css/adminLIB.css">
+    {{{_sections.styles}}}
+</head>
+<body class="sidebar-mini skin-blue">
+   <div id="app" class="wrapper">
+       <header class="main-header">
+           <a href="#" class="logo">
+               <span class="logo-mini">
+                   <b>A</b>
+                   DM
+               </span>
+               <span>
+                   <b>Ad</b>comfort
+               </span>
+           </a>
+           <nav class="navbar navbar-static-top">
+               <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                   <span class="sr-only">Toggle navigation</span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+               </a>
+               <div class="navbar-custom">
+                   <ul class="nav navbar-nav"></ul>
+               </div>
+           </nav>
+       </header>
+       <aside class="main-sidebar">
+           <section class="sidebar">
+               <div class="user-panel">
+                   <div class="pull-left image">
+                       <img width="50" height="50" src="http://boyeoffice.test/img/default.png" class="img-circle" alt="Admin">
+                   </div>
+                   <div class="pull-right info">
+                       <p>{{user.name}}</p>
+                       <a href="#"><i class="fa fa-user text-success"></i> Profile</a>
+                       <a href="/cp/logout"><i class="fa fa-power-off text-warning"></i> Logout</a>
+                   </div>
+               </div>
+               <ul class="sidebar-menu tree" data-widget="tree">
+                   <li class="header">Navigation</li>
+                   <li class=""><a href="/cp">
+                    <i class="fa fa-dashboard"></i>
+                    <span>Dashboard</span>
+                   </a></li>
+                   <li class="treeview">
+                       <a href="#">
+                           <i class="fa fa-users"></i>
+                           <span>Users</span>
+                           <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                       </a>
+                       <ul class="treeview-menu">
+                           <li><a href="/cp/users"><i class="fa fa-circle-o"></i> All Users</a></li>
+                       </ul>
+                   </li>
+                   <li>
+                       <a href="/cp/pages">
+                        <i class="fa fa-file-o"></i>
+                        <span>Pages</span>
+                       </a>
+                   </li>
+                   <li class="treeview">
+                       <a href="#">
+                           <i class="fa fa-file-o"></i>
+                           <span>Manage</span>
+                           <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                       </a>
+                       <ul class="treeview-menu">
+                           <li><a href="/cp/manage/edit_home">
+                                <i class="fa fa-circle-0"></i> Edit homepage
+                           </a></li>
+                       </ul>
+                   </li>
+               </ul>
+           </section>
+       </aside>
+       <div class="content-wrapper">
+           <section class="content-header">
+               <h1>{{ title }}'s Dasboard <small>Control panel</small></h1>
+           </section>
+          {{{ body }}}
+       </div>
+       <footer class="main-footer">
+           <div class="pull-right hidden-xs"><b>Version</b> 1.2.0</div> 
+           <strong>Copyright © 2018 <a href="#">BoyeCMS</a>.</strong> All rights reserved.
+       </footer>
+   </div>
+   <script src="/dist/js/jquery-2.2.3.min.js"></script>
+    <script src="/dist/js/admin-lte.js"></script>
+    <script src="/dist/js/app.js"></script>
+   {{{_sections.scripts }}}
+</body>
+</html>

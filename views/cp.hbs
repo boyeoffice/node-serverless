@@ -1,0 +1,26 @@
+<div class="content">
+    \{{ message }}
+</div>
+
+{{#section 'scripts'}}
+<script src="/dist/js/app.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data(){
+            return{
+                message: 'Vue is working'
+            }
+        }
+    })
+</script>
+{{/section}}
+
+{{#section 'style'}}
+<style>
+.BOYE .navbar-transparent {
+    background-color: #f96332 !important;
+    padding-top: 0.625rem;
+}
+</style>
+{{/section}}

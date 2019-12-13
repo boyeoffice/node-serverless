@@ -1,0 +1,250 @@
+<div class="content">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Edit page</h3>
+                </div>
+                <div class="box-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="title" class="col-lg-3">
+                                Title
+                                <i class="fa fa-info-circle uses-tooltip" 
+                                    data-toggle="tooltip" 
+                                    data-original-title="Title"></i>
+                            </label>
+                            <div class="col-lg-9">
+                                <input type="text" v-model="form.title" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="content" class="col-lg-3">Description</label>
+                            <div class="col-lg-9">
+                                <textarea v-model="form.description" rows="10"class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <a href="/cp/users" class="btn btn-default">Back</a>
+                    <div class="pull-right">
+                        <button v-if="vissibleButton" class="btn btn-primary" @click="updatePage">Update</button>
+                        <button v-else class="btn btn-primary" >Please wait...<i class="fa fa-circle-o-notch fa-spin"></i> </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <select2 v-model="form.status">
+                        <option value="active">Activate</option>
+                        <option value="disabled">Deactivate</option>
+                        </select2>
+                    </div>
+                    <div class="form-group">
+                        <input type="file" @change="onFileChange" style="display: none" id="get-img">
+                        <div class="img-wrapper thumbnail" onclick="document.getElementById('get-img').click()">
+                            <img class="img img-responsive" height="200" src="http://boyeoffice.test/img/3.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<modal></modal>
+
+{{#section 'scripts'}}
+    <script>
+
+        const Select2 = {
+        props: ['options', 'value', 'name'],
+        mounted: function(){
+                var vm = this
+                $(this.$el)
+                //init select2
+                .select2({theme: "bootstrap", data: this.options})
+                .val(this.value)
+                .trigger('change')
+                //emit event on change 
+                .on('change', function(){
+                    vm.$emit('input', this.value)
+                })
+            },
+            watch: {
+                value: function(value){
+                    //update value
+                    $(this.$el)
+                    .val(value)
+                    .trigger('change')
+                },
+                options: function(options){
+                    //update options
+                    $(this.$el).empty().select2({ data: options})
+                }
+            },
+            destroyed: function(){
+                $(this.$el).off().select2('destroy')
+            },
+            template: `
+                <select style="width: 100%;" class="form-control" :name="name">
+                    <slot></slot>
+                </select>
+            `
+        }
+
+        const Modal = {
+            template: `
+                <div :class="{'modal fade': true, 'in show': true}" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Modal title</h4>
+                        <ul>
+                            <li :class="{'tab': true}">Upload</li>
+                            <li :class="{'tab': false}">Media</li>
+                        </ul>
+                    </div>
+                    <div class="modal-body">
+                        <div class="media-upload">
+                            <form @submit.prevent="uploadImage">
+                                <div class="form-group">
+                                    <label for="name">Name:</label>
+                                    <input type="text" v-model="name" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <input @change="fileOnchange" class="form-control" type="file">
+                                </div>
+                                <button class="btn btn-block btn-primary">
+                                   <i class="fa fa-camera"></i> Upload image
+                                </button>
+                            </form>
+                        </div>
+                        <div class="media-cont"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            `,
+            data(){
+                return {
+                    name: '',
+                    selectedFile: '',
+                    form: {
+                        token: '29uohduhkh8e',
+                        url: 'http://adcomfort.com'
+                    }
+                }
+            },
+            methods: {
+                fileOnchange(e){
+                    this.selectedFile = e.target.files[0]
+                    console.log(e.target.files[0])
+                },
+                uploadImage(){
+                    let formData = new FormData()
+                    //formData.append('name', this.name)
+                    formData.append('image', this.selectedFile, this.selectedFile.name)
+                    formData.append('token', '2837992y83')
+                    formData.append('url', 'http://adcomfort.com')
+                    axios.post('/cp/files/upload', formData).then(response => {
+
+                    }).catch(error => {
+
+                    })
+                }
+            }
+        }
+
+        new Vue({
+            el: '#app',
+            components: {
+                Select2,
+                Modal
+            },
+            data(){
+                return{
+                    form: {{{json page}}},
+                    vissibleButton: true
+                }
+            },
+            methods: {
+                updatePage(){
+                    this.vissibleButton = false
+                    axios.put('/cp/pages/' + this.form._id, this.form).then(response => {
+                        toastr.success('Page updated successful!')
+                        window.location = '/cp/pages'
+                    }).catch(error => {
+                        this.vissibleButton = false
+                        console.log(error.response.data)
+                    })
+                },
+                onFileChange(e){
+                    var selectedImage = e.target.files[0]
+                    var formData = new FormData()
+                    formData.append('file', selectedImage)
+                    this.uploadImage(formData)
+                },
+                uploadImage: _.debounce(function(formData) {
+                    axios.post('/cp/files/upload', formData).then(response => {
+
+                    }).catch(error => {
+
+                    })
+                })
+            },
+            directives: {
+                markdown: {
+                    bind(el){
+                        let html = el.textContent
+                        html = html.replace[/#{6}\$?([^\n]+)\n/g, '<h1>$1</h1>']
+                        el.innerHTML =  html
+                    }
+                }
+            }
+        })
+    </script>
+{{/section}}
+
+{{#section 'styles'}}
+    <style>
+        .img-wrapper {
+            width: 100%;
+            height: 100%;
+            border: none;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+        .modal.show {
+            display: block;
+        }
+        .modal.in .modal-dialog {
+            transform: translate(0, 50%);
+        }
+        .modal .modal-header {
+            position: relative;
+            padding-bottom: 22px;
+        }
+        .modal-header ul {
+            position: absolute;
+            bottom: 3px;
+        }
+        .modal-header ul li {
+            cursor: pointer;
+        }
+        .modal-header ul li.tab {
+            border: 1px solid #f4f4f4;
+            border-bottom: 1px solid #fff;
+            color: #3c8dbc;
+        }
+    </style>
+{{/section}}

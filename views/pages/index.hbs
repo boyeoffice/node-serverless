@@ -1,0 +1,74 @@
+<div class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <h3 class="box-title">{{title}}</h3>
+          <div class="box-tools pull-right">
+            <a href="/cp/pages/create" class="btn btn-success btn-sm">Create</a>
+          </div>
+        </div>
+        <div class="box-body">
+
+          <table class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>status</th>
+                <th>Created at</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="data in model.docs">
+                <td>\{{data.title}}</td>
+                <td></td>
+                <td>
+                  <span class="text text-success">\{{data.status}}</span>
+                </td>
+                <td> \{{data.created_at | moment("Do MMMM YYYY")}} </td>
+                <td>
+                  <form @submit.prevent="deletePage(data._id)">
+                    <a :href=" '/cp/pages/' + data._id + '/edit'" class="btn btn-primary btn-sm" title="Edit">
+                      <i class="fa  fa-pencil-square-o"></i>
+                    </a>
+                    <button type="submit" title="Delete" class="btn btn-danger btn-sm"
+                      onclick="return confirm('Are you sure?')">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#section 'scripts'}}
+<script>
+
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        model: {{{json pages }}}
+           }
+          },
+          methods: {
+            deletePage(id, index){
+              axios.delete('/cp/pages/' + id).then(response => {
+                this.model.docs.splice(index, 1)
+                toastr.success('Page deleted!')
+              }).catch(error => {
+                toastr.warning('An error occurred!')
+              })
+            }
+          }
+        })
+</script>
+{{/section}}
